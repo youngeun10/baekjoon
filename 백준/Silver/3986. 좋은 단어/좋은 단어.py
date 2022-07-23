@@ -7,11 +7,10 @@ for _ in range(n):
     result = []
 
     for i in s:
-
         if len(result) == 0:
             result.append(i)
         else:
-            if result[len(result)-1] == i:
+            if result[-1] == i:
                 result.pop()
             else:
                 result.append(i)
