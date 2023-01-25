@@ -1,0 +1,7 @@
+SELECT COUNT(A.NAME) AS COUNT
+  FROM 
+  (
+      SELECT NAME
+        FROM ANIMAL_INS
+       GROUP BY NAME
+  ) A
