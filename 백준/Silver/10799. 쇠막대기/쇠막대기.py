@@ -1,15 +1,16 @@
-arr = input()
-arr = arr.replace('()', '-')
-bar = 0
-n = 0
+import sys
+input = sys.stdin.readline
 
-for i in arr:
-    if i == '(':
-        n += 1
-    elif i == '-':
-        bar += n
+bar = input()
+newBar = bar.replace("()", "-")
+cnt = 0
+result = 0
+for b in newBar:
+    if b == "(":
+        cnt += 1
+    elif b == ")":
+        cnt -= 1
+        result += 1
     else:
-        n -= 1
-        bar += 1
-
-print(bar)
+        result += cnt
+print(result)
