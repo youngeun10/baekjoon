@@ -1,11 +1,10 @@
-from sys import stdin
+import sys
 from collections import deque
+input = sys.stdin.readline
 
-q = deque([i for i in range(1, int(stdin.readline())+1)])
+q = deque([i for i in range(1, int(input())+1)])
 
 while len(q) > 1:
     q.popleft()
-    tmp = q.popleft()
-    q.append(tmp)
-
+    q.append(q.popleft())
 print(q[0])
