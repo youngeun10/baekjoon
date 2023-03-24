@@ -2,43 +2,48 @@ from collections import deque
 import sys
 input = sys.stdin.readline
 
-def directionChange(d, c):
-    if c == 'L':
-        return (d-1) % 4
-    else:
-        return (d+1) % 4
-
+# board
 N = int(input())
+board = [[0] * (N+1) for _ in range(N+1)]
+
+# apple
 K = int(input())
-board = [[0] * N for _ in range(N)]
 for _ in range(K):
-    a, b = map(int, input().split())
-    board[a-1][b-1] = 1
+    x, y = map(int, input().split())
+    board[y][x] = 1
+
+# Switching Direction
 L = int(input())
-times = {}
-for i in range(L):
-    X, C = input().split()
-    times[int(X)] = C
+switch = {}
+for _ in range(L):
+    t, d = map(str, input().split())
+    switch[int(t)] = d
 
-dx = [0, 1, 0, -1]
-dy = [-1, 0, 1, 0]
+# direction x, y
+dx = [1, 0, -1, 0]
+dy = [0, 1, 0, -1]
+direction = 0
 
-direction = 1
+x, y = 1, 1
+board[x][y] = 2
+snake = deque([[x, y]])
+
 time = 1
-y, x = 0, 0
-snake = deque([[y, x]])
-board[y][x] = 2
 
 while True:
-    y, x = y + dy[direction], x + dx[direction]
-    if 0 <= y < N and 0 <= x < N and board[y][x] != 2:
-        if not board[y][x] == 1:
-            delY, delX = snake.popleft()
-            board[delY][delX] = 0
-        board[y][x] = 2
-        snake.append([y, x])
-        if time in times.keys():
-            direction = directionChange(direction, times[time])
+    x, y = x + dx[direction], y + dy[direction]
+    # 끝이 아니거나, 나를 밟지 않을 때
+    if 0 < x <= N and 0 < y <= N and board[x][y] != 2:
+        if board[x][y] != 1:
+            delX, delY = snake.popleft()
+            board[delX][delY] = 0
+        snake.append([x, y])
+        board[x][y] = 2
+        if time in switch.keys():
+            if switch[time] == 'L':
+                direction = (direction - 1) % 4
+            else:
+                direction = (direction + 1) % 4
         time += 1
     else:
         print(time)
