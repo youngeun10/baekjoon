@@ -1,12 +1,11 @@
 def solution(participant, completion):
-    p = {}
-    for i in participant:
-        if i not in p:
-            p[i] = 1
-        else:
-            p[i] += 1
-    for i in completion:
-        p[i] -= 1
-    answer = [k for k, v in p.items() if v == 1]
+    temp = 0
+    dic = {}
+    for part in participant:
+        dic[hash(part)] = part
+        temp += int(hash(part))
+    for com in completion:
+        temp -= hash(com)
+    answer = dic[temp]
 
-    return answer[0]
+    return answer
