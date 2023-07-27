@@ -1,24 +1,30 @@
-def dfs(start):
+def bfs(graph, v, checked):
     global cnt
-    visited[start] = 1
-    for i in store[start]:
-        if visited[i] == 0:
-            dfs(i)
-            cnt += 1
 
-from sys import stdin
-input = stdin.readline
-n = int(input())
-store = {}
-for _ in range(int(input())):
-    k, v = map(int, input().rstrip().split())
-    if k not in store: store[k] = [v]
-    else: store[k].append(v)
-    if v not in store: store[v] = [k]
-    else: store[v].append(k)
+    if not checked[v]:
+        checked[v] = True
+        cnt += 1
 
+    for i in graph[v]:
+        if not checked[i]:
+            bfs(graph, i, checked)
+
+
+import sys
+input = sys.stdin.readline
+
+comN = int(input()) + 1
+visited = [False] * comN
+network = {}
+for i in range(1, comN):
+    network[i] = []
 cnt = 0
-visited = [0] * (n+1)
 
-dfs(1)
-print(cnt)
+for _ in range(int(input())):
+    s, e = map(int, input().split())
+
+    network[s].append(e)
+    network[e].append(s)
+
+bfs(network, 1, visited)
+print(cnt-1)
