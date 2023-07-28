@@ -1,33 +1,24 @@
-from collections import deque
-from sys import stdin
+import sys
 
-def bfs(graph, s, visited):
-    queue = deque([s])
-    visited[s] = True
+def main():
+    N = int(sys.stdin.readline())
+    graph = [ [] for _ in range(N+1)]
+    for _ in range(N-1):
+        x, y = map(int, sys.stdin.readline().split())
+        graph[x].append(y)
+        graph[y].append(x)
 
-    while queue:
-        v = queue.popleft()
-        for i in graph[v]:
-            if not visited[i]:
-                result[i] = v
-                queue.append(i)
-                visited[i] = True
+    parents = [0] * (N+1)
+    stack = [1]
 
-input = stdin.readline
-N = int(input())
-graph, result = {}, {}
-visited = [False] * (N+1)
+    while stack:
+        node = stack.pop()
+        for next_node in graph[node]:
+            if next_node != parents[node]:
+                parents[next_node] = node
+                stack.append(next_node)
+    print(*parents[2:], sep="\n")
 
-for i in range(1, N+1):
-    result[i] = 0
-    graph[i] = []
 
-for _ in range(1, N):
-    s, e = map(int, input().split())
-    graph[s].append(e)
-    graph[e].append(s)
-
-bfs(graph, 1, visited)
-
-for i in range(2, N+1):
-    print(result[i])
+if __name__ == "__main__":
+    main()
