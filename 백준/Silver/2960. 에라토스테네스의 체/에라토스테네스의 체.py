@@ -1,17 +1,15 @@
-# 에라토스테네스의 체
 import sys
 
+# N: 범위의 끝 수, K: 구하고 싶은 번째
 N, K = map(int, sys.stdin.readline().split())
-numChk = [i for i in range(N+1)]
+numChk = [True] * (N+1)         # 값이 해당 되었는지 확인하는 리스트
 cnt = 1
 
 for i in range(2, N+1):
-    n = i
-    while n <= N:
-        if numChk[n] != 0:
-            if cnt == K:
-                print(n)
-                exit()
+    v = i
+    while v <= N:
+        if numChk[v]:
+            numChk[v] = False
+            if cnt == K: print(v); exit()
             cnt += 1
-            numChk[n] = 0
-        n += i
+        v += i
