@@ -1,53 +1,34 @@
 import sys
 input = sys.stdin.readline
-
 from collections import deque
 
-N = int(input())
-grim = [list(input().rstrip()) for _ in range(N)]
+N = int(input())        # N 입력
+grim = [list(input().rstrip()) for _ in range(N)]       # 그림 입력
 
-def colorBlindness(g):      # 색맹일 경우
-    result = []
-    for i in range(N):
-        tmp = []
-        for j in range(N):
-            tmp.append('X') if g[i][j] in ('R', 'G') else tmp.append(g[i][j])
-        result.append(tmp)
-    return result
+def solution(info):
+    visited = [[False] * N for _ in range(N)]       # 방문 정보르 저장
+    dirc = [(0, 1), (0, -1), (-1, 0), (1, 0)]       # 동서남북 방향 설정
+    cnt = 0
 
-def bfs(x, y):       # 영역 구하기
-    way = [(1, 0), (-1, 0), (0, -1), (0 ,1)]
-    c = grim[x][y]
-    q = deque([(x, y)])
-    visited[x][y] = True
-
-    while q:
-        x, y = q.popleft()
-        for dx, dy in way:
-            if x + dx >= N or x + dx < 0 or y + dy >= N or y + dy < 0:
+    for r in range(N):
+        for c in range(N):
+            if visited[r][c]:
                 continue
+            visited[r][c] = True
+            color = grim[r][c]
+            cnt += 1
+            queue = deque([(r, c)])  # queue를 설정
+            while queue:
+                _r, _c = queue.popleft()
+                for dr, dc in dirc:
+                    x, y = _r + dr, _c + dc
+                    if not (0 <= x < N and 0 <= y < N) or visited[x][y] or grim[x][y] in info[color]:
+                        continue
+                    queue.append((x, y))
+                    visited[x][y] = True
+    return cnt
 
-            if not visited[x+dx][y+dy] and c == grim[x+dx][y+dy]:
-                q.append((x+dx, y+dy))
-                visited[x+dx][y+dy] = True
+diff_color1 = {"R": {"G", "B"}, "G": {"R", "B"}, "B": {"R", "G"}}
+diff_color2 = {"R": {"B"}, "G": {"B"}, "B": {"R", "G"}}
 
-visited = [[False] * N for _ in range(N)]
-result1  = 0
-
-for i in range(N):
-    for j in range(N):
-        if not visited[i][j]:
-            bfs(i, j)
-            result1 += 1
-
-visited = [[False] * N for _ in range(N)]
-grim = colorBlindness(grim)
-result2 = 0
-
-for i in range(N):
-    for j in range(N):
-        if not visited[i][j]:
-            bfs(i, j)
-            result2 += 1
-
-print(result1, result2)
+print(solution(diff_color1), solution(diff_color2))
