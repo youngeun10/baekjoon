@@ -6,7 +6,7 @@ def find(x, parent):
     if parent[x] == x:
         return x
     parent[x] = find(parent[x], parent)
-    return find(parent[x], parent)
+    return parent[x]
 
 def union(s, e, parent):
     s = find(s, parent)
